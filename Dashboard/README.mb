@@ -1,1 +1,53 @@
+📊 Dashboard de Desempenho - League of Legends
+Este diretório contém o arquivo do Power BI (.pbix) e os detalhes da camada de visualização do projeto. O objetivo deste dashboard não é apenas mostrar números, mas sim traduzir dados brutos das partidas em indicadores de eficiência e comportamento tático.
 
+🎨 UI/UX e Design (Template Customizado)
+Para garantir uma imersão no tema e uma leitura de dados confortável (reduzindo a fadiga visual), foi desenvolvido um template exclusivo para o background do painel.
+
+Paleta de Cores: Inspirada diretamente na identidade visual e no logotipo do League of Legends. Utilizamos fundos escuros (Dark Mode) contrastando com tons de Dourado (Gold) e Azul/Teal (Hextech) para destacar os KPIs e gráficos principais.
+
+Layout Estratégico: Segue o padrão "Z-Pattern" de leitura de dashboards.
+
+Topo: Cartões de leitura rápida (Win Rate, KDA, Eficiência).
+
+Centro (Maior destaque): Gráfico de dispersão profundo para análise de outliers.
+
+Laterais/Rodapé: Gráficos de apoio para detalhamento por Campeão e Rota.
+
+🧠 Modelagem e Lógica de Negócios (DAX)
+Os dados extraídos da API precisaram de refinamento dentro do Power BI para refletirem a realidade do jogo:
+
+Criação da Métrica de Eficiência (Dano por Ouro):
+Em vez de analisar Ouro e Dano separadamente, foi criada uma medida DAX (DIVIDE(Soma Dano, Soma Ouro)) que calcula a conversão de recursos. Isso responde à pergunta de negócio: "Este jogador transforma a vantagem financeira em impacto real nas lutas?"
+
+Tratamento de Anomalias de Rota (Lane Ajustada):
+A API muitas vezes retorna partidas com rotas nulas (BLANK) ou despadronizadas (BOTTOM, NONE). Foi criada uma coluna calculada utilizando a função SWITCH() para agrupar corretamente os jogadores em Top, Jungle, Mid, Bot e Suporte, garantindo a integridade dos gráficos segmentados.
+
+Chave Única de Jogador-Partida:
+Para evitar a aglutinação de dados no gráfico de dispersão, foi concatenado o match_id com o puuid, gerando um ID exclusivo para cada performance individual na base.
+
+💡 Principais Insights Visuais
+1. Eficiência de Combate (Ouro vs. Dano)
+Visual: Gráfico de Dispersão central.
+
+Insight: A plotagem revela os diferentes estilos de jogo e o papel de cada rota. Suportes formam um cluster denso no canto inferior esquerdo (baixo custo, baixo dano). Mids e ADCs se esticam para o extremo superior direito, confirmando o poder de escalada (scaling).
+
+Outliers: Jogadores que ficam significativamente abaixo da linha de tendência central indicam perfis de "Split-pushers" (farmaram muito, mas não participaram de lutas) ou jogadores que perderam a vantagem inicial.
+
+2. Agressividade por Rota
+Visual: Gráfico de Colunas Empilhadas (Kills + Assists).
+
+Insight: Comprova matematicamente as funções do meta. Enquanto a rota do Mid e do Bot (ADCs) lideram as barras de Kills (cor de destaque), os Suportes e Junglers possuem barras massivas de Assists, demonstrando o foco em utilidade e controle de mapa.
+
+3. O Paradoxo do Meta (Top 10 Campeões)
+Visual: Gráfico de Colunas Clusterizadas com Linha (Pick Rate x Win Rate).
+
+Insight: O uso de um filtro Top N isola os 10 campeões mais populares. A análise cruza a popularidade (barras) com a taxa de sucesso (linha). Evidencia que os campeões mais escolhidos pelos jogadores nem sempre são os que garantem a maior Taxa de Vitória, quebrando a ilusão de que "campeão popular é campeão forte".
+
+4. Distribuição Demográfica
+Visual: Gráficos de Rosca e Linhas por Tier.
+
+Insight: Mapeia a concentração da base de jogadores (onde a maioria se encontra entre o Prata e o Ouro) e mostra a evolução da taxa de vitórias/derrotas conforme o nível de habilidade (Elo) aumenta.
+
+🖱️ Interatividade e Usabilidade
+Para melhorar a navegação, foi implementado um painel lateral de filtros (Slicers) permitindo o drill-down por Elo, Rota e Campeão. Além disso, o dashboard conta com um botão nativo de "Limpar Filtros" configurado via ações de Bookmarks, garantindo que o usuário retorne à visão global com apenas um clique.
